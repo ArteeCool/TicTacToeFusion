@@ -79,6 +79,7 @@ public class NetworkController : Fusion.Behaviour, INetworkRunnerCallbacks
     
     public void HostSession()
     {
+        if (!_runner.LobbyInfo.IsValid) return;
         _roomName = _inputFieldText.text;
         
         if (String.IsNullOrEmpty(_roomName))
@@ -90,6 +91,7 @@ public class NetworkController : Fusion.Behaviour, INetworkRunnerCallbacks
     
     public void JoinSession(String sessionName)
     {
+        if (_runner.State == NetworkRunner.States.Shutdown) return;
         _sessionName = sessionName;
         StartGame(GameMode.Client);
     }
@@ -190,10 +192,6 @@ public class NetworkController : Fusion.Behaviour, INetworkRunnerCallbacks
     {
     }
 
-    public void OnDisconnectedFromServer(NetworkRunner runner)
-    {
-    }
-
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
     {
     }
@@ -205,10 +203,6 @@ public class NetworkController : Fusion.Behaviour, INetworkRunnerCallbacks
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
     {
         
-    }
-    
-    public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data)
-    {
     }
 
     public void OnSceneLoadDone(NetworkRunner runner)

@@ -40,7 +40,7 @@ public class GameController : NetworkBehaviour
 
     public void StartGame()
     {
-        _playerTurn = true;
+        _playerTurn = false;
         OnButtonClicked();
 
         /*foreach (var player in NetworkController.Instance._runner.ActivePlayers)
@@ -67,11 +67,10 @@ public class GameController : NetworkBehaviour
 
         if (CheckWin())
         {
-            
-            if (NetworkController.Instance._runner.LocalPlayer.PlayerId - 1 == Convert.ToInt32(_playerTurn))
+            if (NetworkController.Instance._runner.LocalPlayer.PlayerId - 1 != Convert.ToInt32(_playerTurn))
             {
                 ProfileController.Instance._profile.WinCount++;
-                Debug.Log(ProfileController.Instance._profile);
+                ProfileController.Instance.SaveData();
             }
             if (_playerTurn)
             {
