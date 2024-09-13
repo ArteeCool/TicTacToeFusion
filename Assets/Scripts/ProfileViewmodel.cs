@@ -55,12 +55,15 @@ public class ProfileViewmodel : MonoBehaviour
     {
         if (_nicknameInputField != null)
         {
-            Debug.Log("SaveData");
             if (_nicknameInputField.text != ProfileController.Instance._profile.Name)
             {
                 if (_nicknameInputField.text.Length >= 3)
                 {
                     ProfileController.Instance._profile.Name = _nicknameInputField.text;    
+                }
+                if (_nicknameInputField.text.Length >= 12)
+                {
+                    ProfileController.Instance._profile.Name = _nicknameInputField.text.Substring(0, 12);    
                 }
             }           
             ProfileController.Instance.UpdatePlayerDisplayName();

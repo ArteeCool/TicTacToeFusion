@@ -28,9 +28,17 @@ namespace PlayFab.AdminModels
     public class Action : PlayFabBaseModel
     {
         /// <summary>
+        /// Action content to add inventory item v2
+        /// </summary>
+        public AddInventoryItemV2Content AddInventoryItemV2Content;
+        /// <summary>
         /// Action content to ban player
         /// </summary>
         public BanPlayerContent BanPlayerContent;
+        /// <summary>
+        /// Action content to delete inventory item v2
+        /// </summary>
+        public DeleteInventoryItemV2Content DeleteInventoryItemV2Content;
         /// <summary>
         /// Action content to delete player
         /// </summary>
@@ -63,6 +71,10 @@ namespace PlayFab.AdminModels
         /// Action content to send email
         /// </summary>
         public SendEmailContent SendEmailContent;
+        /// <summary>
+        /// Action content to subtract inventory item v2
+        /// </summary>
+        public SubtractInventoryItemV2Content SubtractInventoryItemV2Content;
     }
 
     [Serializable]
@@ -180,6 +192,56 @@ namespace PlayFab.AdminModels
         /// Campaign comparison.
         /// </summary>
         public SegmentFilterComparison? Comparison;
+    }
+
+    [Serializable]
+    public class AddInventoryItemsV2SegmentAction : PlayFabBaseModel
+    {
+        /// <summary>
+        /// Amount of the item to be granted to a player
+        /// </summary>
+        public int? Amount;
+        /// <summary>
+        /// The collection id for where the item will be granted in the player inventory
+        /// </summary>
+        public string CollectionId;
+        /// <summary>
+        /// The duration in seconds of the subscription to be granted to a player
+        /// </summary>
+        public int? DurationInSeconds;
+        /// <summary>
+        /// The id of item to be granted to the player
+        /// </summary>
+        public string ItemId;
+        /// <summary>
+        /// The stack id for where the item will be granted in the player inventory
+        /// </summary>
+        public string StackId;
+    }
+
+    [Serializable]
+    public class AddInventoryItemV2Content : PlayFabBaseModel
+    {
+        /// <summary>
+        /// Amount of the item to be granted to a player
+        /// </summary>
+        public int? Amount;
+        /// <summary>
+        /// The collection id for where the item will be granted in the player inventory
+        /// </summary>
+        public string CollectionId;
+        /// <summary>
+        /// The duration in seconds of the subscription to be granted to a player
+        /// </summary>
+        public int? DurationInSeconds;
+        /// <summary>
+        /// The id of item to be granted to the player
+        /// </summary>
+        public string ItemId;
+        /// <summary>
+        /// The stack id for where the item will be granted in the player inventory
+        /// </summary>
+        public string StackId;
     }
 
     [Serializable]
@@ -358,6 +420,10 @@ namespace PlayFab.AdminModels
         /// The reason why this ban was applied.
         /// </summary>
         public string Reason;
+        /// <summary>
+        /// The family type of the suer that is included in the ban.
+        /// </summary>
+        public string UserFamilyType;
     }
 
     [Serializable]
@@ -366,7 +432,7 @@ namespace PlayFab.AdminModels
         /// <summary>
         /// Duration(in hours) to ban a player. If not provided, the player will be banned permanently.
         /// </summary>
-        public int BanDurationHours;
+        public int? BanDurationHours;
         /// <summary>
         /// Reason to ban a player
         /// </summary>
@@ -408,6 +474,10 @@ namespace PlayFab.AdminModels
         /// The reason for this ban. Maximum 140 characters.
         /// </summary>
         public string Reason;
+        /// <summary>
+        /// The family type of the user that should be included in the ban if applicable. May affect multiple players.
+        /// </summary>
+        public UserFamilyType? UserFamilyType;
     }
 
     /// <summary>
@@ -1181,6 +1251,10 @@ namespace PlayFab.AdminModels
         /// Manually specified information for an OpenID Connect issuer.
         /// </summary>
         public OpenIdIssuerInformation IssuerInformation;
+        /// <summary>
+        /// Override the issuer name for user indexing and lookup.
+        /// </summary>
+        public string IssuerOverride;
     }
 
     /// <summary>
@@ -1456,6 +1530,40 @@ namespace PlayFab.AdminModels
         /// Key of the content item to be deleted
         /// </summary>
         public string Key;
+    }
+
+    [Serializable]
+    public class DeleteInventoryItemsV2SegmentAction : PlayFabBaseModel
+    {
+        /// <summary>
+        /// The collection id for where the item will be removed from the player inventory
+        /// </summary>
+        public string CollectionId;
+        /// <summary>
+        /// The id of item to be removed from the player
+        /// </summary>
+        public string ItemId;
+        /// <summary>
+        /// The stack id for where the item will be removed from the player inventory
+        /// </summary>
+        public string StackId;
+    }
+
+    [Serializable]
+    public class DeleteInventoryItemV2Content : PlayFabBaseModel
+    {
+        /// <summary>
+        /// The collection id for where the item will be removed from the player inventory
+        /// </summary>
+        public string CollectionId;
+        /// <summary>
+        /// The id of item to be removed from the player
+        /// </summary>
+        public string ItemId;
+        /// <summary>
+        /// The stack id for where the item will be removed from the player inventory
+        /// </summary>
+        public string StackId;
     }
 
     /// <summary>
@@ -2509,6 +2617,36 @@ namespace PlayFab.AdminModels
         InvalidNamespaceMismatch,
         LeaderboardColumnLengthMismatch,
         InvalidStatisticScore,
+        LeaderboardColumnsNotSpecified,
+        LeaderboardMaxSizeTooLarge,
+        InvalidAttributeStatisticsSpecified,
+        LeaderboardNotFound,
+        TokenSigningKeyNotFound,
+        LeaderboardNameConflict,
+        LinkedStatisticColumnMismatch,
+        NoLinkedStatisticToLeaderboard,
+        StatDefinitionAlreadyLinkedToLeaderboard,
+        LinkingStatsNotAllowedForEntityType,
+        LeaderboardCountLimitExceeded,
+        LeaderboardSizeLimitExceeded,
+        LeaderboardDefinitionModificationNotAllowedWhileLinked,
+        StatisticDefinitionModificationNotAllowedWhileLinked,
+        LeaderboardUpdateNotAllowedWhileLinked,
+        CloudScriptAzureFunctionsEventHubRequestError,
+        ExternalEntityNotAllowedForTier,
+        InvalidBaseTimeForInterval,
+        EntityTypeMismatchWithStatDefinition,
+        SpecifiedVersionLeaderboardNotFound,
+        LeaderboardColumnLengthMismatchWithStatDefinition,
+        DuplicateColumnNameFound,
+        LinkedStatisticColumnNotFound,
+        LinkedStatisticColumnRequired,
+        MultipleLinkedStatisticsNotAllowed,
+        DuplicateLinkedStatisticColumnNameFound,
+        AggregationTypeNotAllowedForMultiColumnStatistic,
+        MaxQueryableVerionsValueNotAllowedForTier,
+        StatisticDefinitionHasNullOrEmptyVersionConfiguration,
+        StatisticColumnLengthMismatch,
         MatchmakingEntityInvalid,
         MatchmakingPlayerAttributesInvalid,
         MatchmakingQueueNotFound,
@@ -2552,6 +2690,7 @@ namespace PlayFab.AdminModels
         CatalogItemTypeInvalid,
         CatalogBadRequest,
         CatalogTooManyRequests,
+        InvalidCatalogItemConfiguration,
         ExportInvalidStatusUpdate,
         ExportInvalidPrefix,
         ExportBlobContainerDoesNotExist,
@@ -2653,10 +2792,10 @@ namespace PlayFab.AdminModels
         LobbyNewOwnerMustBeConnected,
         LobbyCurrentOwnerStillConnected,
         LobbyMemberIsNotOwner,
-        LobbyAssociatedServerMismatch,
-        LobbyAssociatedServerNotFound,
-        LobbyAssociatedToDifferentServer,
-        LobbyServerAlreadyAssociated,
+        LobbyServerMismatch,
+        LobbyServerNotFound,
+        LobbyDifferentServerAlreadyJoined,
+        LobbyServerAlreadyJoined,
         LobbyIsNotClientOwned,
         LobbyDoesNotUseConnections,
         EventSamplingInvalidRatio,
@@ -2682,6 +2821,10 @@ namespace PlayFab.AdminModels
         EventSinkTenantNotFound,
         EventSinkAadNotFound,
         EventSinkDatabaseNotFound,
+        EventSinkTitleUnauthorized,
+        EventSinkInsufficientRoleAssignment,
+        EventSinkContainerNotFound,
+        EventSinkTenantIdInvalid,
         OperationCanceled,
         InvalidDisplayNameRandomSuffixLength,
         AllowNonUniquePlayerDisplayNamesDisableNotAllowed,
@@ -2701,7 +2844,92 @@ namespace PlayFab.AdminModels
         PlayerCustomPropertiesDuplicatePropertyName,
         PlayerCustomPropertiesPropertyDoesNotExist,
         AddonAlreadyExists,
-        AddonDoesntExist
+        AddonDoesntExist,
+        CopilotDisabled,
+        CopilotInvalidRequest,
+        TrueSkillUnauthorized,
+        TrueSkillInvalidTitleId,
+        TrueSkillInvalidScenarioId,
+        TrueSkillInvalidModelId,
+        TrueSkillInvalidModelName,
+        TrueSkillInvalidPlayerIds,
+        TrueSkillInvalidEntityKey,
+        TrueSkillInvalidConditionKey,
+        TrueSkillInvalidConditionValue,
+        TrueSkillInvalidConditionAffinityWeight,
+        TrueSkillInvalidEventName,
+        TrueSkillMatchResultCreated,
+        TrueSkillMatchResultAlreadySubmitted,
+        TrueSkillBadPlayerIdInMatchResult,
+        TrueSkillInvalidBotIdInMatchResult,
+        TrueSkillDuplicatePlayerInMatchResult,
+        TrueSkillNoPlayerInMatchResultTeam,
+        TrueSkillPlayersInMatchResultExceedingLimit,
+        TrueSkillInvalidPreMatchPartyInMatchResult,
+        TrueSkillInvalidTimestampInMatchResult,
+        TrueSkillStartTimeMissingInMatchResult,
+        TrueSkillEndTimeMissingInMatchResult,
+        TrueSkillInvalidPlayerSecondsPlayedInMatchResult,
+        TrueSkillNoTeamInMatchResult,
+        TrueSkillNotEnoughTeamsInMatchResult,
+        TrueSkillInvalidRanksInMatchResult,
+        TrueSkillNoWinnerInMatchResult,
+        TrueSkillMissingRequiredCondition,
+        TrueSkillMissingRequiredEvent,
+        TrueSkillUnknownEventName,
+        TrueSkillInvalidEventCount,
+        TrueSkillUnknownConditionKey,
+        TrueSkillUnknownConditionValue,
+        TrueSkillScenarioConfigDoesNotExist,
+        TrueSkillUnknownModelId,
+        TrueSkillNoModelInScenario,
+        TrueSkillNotSupportedForTitle,
+        TrueSkillModelIsNotActive,
+        TrueSkillUnauthorizedToQueryOtherPlayerSkills,
+        TrueSkillInvalidMaxIterations,
+        TrueSkillEndTimeBeforeStartTime,
+        TrueSkillInvalidJobId,
+        TrueSkillInvalidMetadataId,
+        TrueSkillMissingBuildVerison,
+        TrueSkillJobAlreadyExists,
+        TrueSkillJobNotFound,
+        TrueSkillOperationCanceled,
+        TrueSkillActiveModelLimitExceeded,
+        TrueSkillTotalModelLimitExceeded,
+        TrueSkillUnknownInitialModelId,
+        TrueSkillUnauthorizedForJob,
+        TrueSkillInvalidScenarioName,
+        TrueSkillConditionStateIsRequired,
+        TrueSkillEventStateIsRequired,
+        TrueSkillDuplicateEvent,
+        TrueSkillDuplicateCondition,
+        TrueSkillInvalidAnomalyThreshold,
+        TrueSkillConditionKeyLimitExceeded,
+        TrueSkillConditionValuePerKeyLimitExceeded,
+        TrueSkillInvalidTimestamp,
+        TrueSkillEventLimitExceeded,
+        TrueSkillInvalidPlayers,
+        TrueSkillTrueSkillPlayerNull,
+        TrueSkillInvalidPlayerId,
+        TrueSkillInvalidSquadSize,
+        TrueSkillConditionSetNotInModel,
+        GameSaveManifestNotFound,
+        GameSaveManifestVersionAlreadyExists,
+        GameSaveConflictUpdatingManifest,
+        GameSaveManifestUpdatesNotAllowed,
+        GameSaveFileAlreadyExists,
+        GameSaveManifestVersionNotFinalized,
+        GameSaveUnknownFileInManifest,
+        GameSaveFileExceededReportedSize,
+        GameSaveFileNotUploaded,
+        StateShareForbidden,
+        StateShareTitleNotInFlight,
+        StateShareStateNotFound,
+        StateShareLinkNotFound,
+        StateShareStateRedemptionLimitExceeded,
+        StateShareStateRedemptionLimitNotUpdated,
+        StateShareCreatedStatesLimitExceeded,
+        StateShareIdMissingOrMalformed
     }
 
     [Serializable]
@@ -3655,15 +3883,15 @@ namespace PlayFab.AdminModels
     public class GrantItemContent : PlayFabBaseModel
     {
         /// <summary>
-        /// Publish cloudscript results as playstream event
+        /// The catalog version of the item to be granted to the player
         /// </summary>
         public string CatalogVersion;
         /// <summary>
-        /// Publish cloudscript results as playstream event
+        /// The id of item to be granted to the player
         /// </summary>
         public string ItemId;
         /// <summary>
-        /// Publish cloudscript results as playstream event
+        /// Quantity of the item to be granted to a player
         /// </summary>
         public int ItemQuantity;
     }
@@ -4104,7 +4332,8 @@ namespace PlayFab.AdminModels
         OpenIdConnect,
         Apple,
         NintendoSwitchAccount,
-        GooglePlayGames
+        GooglePlayGames,
+        XboxMobileStore
     }
 
     [Serializable]
@@ -4242,9 +4471,17 @@ namespace PlayFab.AdminModels
         /// </summary>
         public bool DiscoverConfiguration;
         /// <summary>
+        /// Ignore 'nonce' claim in identity tokens.
+        /// </summary>
+        public bool? IgnoreNonce;
+        /// <summary>
         /// Information for an OpenID Connect provider.
         /// </summary>
         public OpenIdIssuerInformation IssuerInformation;
+        /// <summary>
+        /// Override the issuer name for user indexing and lookup.
+        /// </summary>
+        public string IssuerOverride;
     }
 
     [Serializable]
@@ -5836,9 +6073,17 @@ namespace PlayFab.AdminModels
     public class SegmentTrigger : PlayFabBaseModel
     {
         /// <summary>
+        /// Add inventory item v2 segment trigger action.
+        /// </summary>
+        public AddInventoryItemsV2SegmentAction AddInventoryItemsV2Action;
+        /// <summary>
         /// Ban player segment trigger action.
         /// </summary>
         public BanPlayerSegmentAction BanPlayerAction;
+        /// <summary>
+        /// Delete inventory item v2 segment trigger action.
+        /// </summary>
+        public DeleteInventoryItemsV2SegmentAction DeleteInventoryItemsV2Action;
         /// <summary>
         /// Delete player segment trigger action.
         /// </summary>
@@ -5875,6 +6120,10 @@ namespace PlayFab.AdminModels
         /// Push notification segment trigger action.
         /// </summary>
         public PushNotificationSegmentAction PushNotificationAction;
+        /// <summary>
+        /// Subtract inventory item v2 segment trigger action.
+        /// </summary>
+        public SubtractInventoryItemsV2SegmentAction SubtractInventoryItemsV2Action;
     }
 
     /// <summary>
@@ -6303,6 +6552,56 @@ namespace PlayFab.AdminModels
     }
 
     [Serializable]
+    public class SubtractInventoryItemsV2SegmentAction : PlayFabBaseModel
+    {
+        /// <summary>
+        /// Amount of the item to removed from the player
+        /// </summary>
+        public int? Amount;
+        /// <summary>
+        /// The collection id for where the item will be removed from the player inventory
+        /// </summary>
+        public string CollectionId;
+        /// <summary>
+        /// The duration in seconds to be removed from the subscription in the players inventory
+        /// </summary>
+        public int? DurationInSeconds;
+        /// <summary>
+        /// The id of item to be removed from the player
+        /// </summary>
+        public string ItemId;
+        /// <summary>
+        /// The stack id for where the item will be removed from the player inventory
+        /// </summary>
+        public string StackId;
+    }
+
+    [Serializable]
+    public class SubtractInventoryItemV2Content : PlayFabBaseModel
+    {
+        /// <summary>
+        /// Amount of the item to removed from the player
+        /// </summary>
+        public int? Amount;
+        /// <summary>
+        /// The collection id for where the item will be removed from the player inventory
+        /// </summary>
+        public string CollectionId;
+        /// <summary>
+        /// The duration in seconds to be removed from the subscription in the players inventory
+        /// </summary>
+        public int? DurationInSeconds;
+        /// <summary>
+        /// The id of item to be removed from the player
+        /// </summary>
+        public string ItemId;
+        /// <summary>
+        /// The stack id for where the item will be removed from the player inventory
+        /// </summary>
+        public string StackId;
+    }
+
+    [Serializable]
     public class SubtractUserVirtualCurrencyRequest : PlayFabRequestCommon
     {
         /// <summary>
@@ -6466,6 +6765,10 @@ namespace PlayFab.AdminModels
         /// The updated reason for the ban to be updated. Maximum 140 characters. Null for no change.
         /// </summary>
         public string Reason;
+        /// <summary>
+        /// The updated family type of the user that should be included in the ban. Null for no change.
+        /// </summary>
+        public UserFamilyType? UserFamilyType;
     }
 
     /// <summary>
@@ -6575,6 +6878,10 @@ namespace PlayFab.AdminModels
         /// </summary>
         public string ConnectionId;
         /// <summary>
+        /// Ignore 'nonce' claim in identity tokens.
+        /// </summary>
+        public bool? IgnoreNonce;
+        /// <summary>
         /// The issuer URL or discovery document URL to read issuer information from
         /// </summary>
         public string IssuerDiscoveryUrl;
@@ -6582,6 +6889,10 @@ namespace PlayFab.AdminModels
         /// Manually specified information for an OpenID Connect issuer.
         /// </summary>
         public OpenIdIssuerInformation IssuerInformation;
+        /// <summary>
+        /// Override the issuer name for user indexing and lookup.
+        /// </summary>
+        public string IssuerOverride;
     }
 
     /// <summary>
@@ -7108,6 +7419,13 @@ namespace PlayFab.AdminModels
         public string FacebookInstantGamesId;
     }
 
+    public enum UserFamilyType
+    {
+        None,
+        Xbox,
+        Steam
+    }
+
     [Serializable]
     public class UserGameCenterInfo : PlayFabBaseModel
     {
@@ -7241,7 +7559,8 @@ namespace PlayFab.AdminModels
         OpenIdConnect,
         Apple,
         NintendoSwitchAccount,
-        GooglePlayGames
+        GooglePlayGames,
+        XboxMobileStore
     }
 
     [Serializable]

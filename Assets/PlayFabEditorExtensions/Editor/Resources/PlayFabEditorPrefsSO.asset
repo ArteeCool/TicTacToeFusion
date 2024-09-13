@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PlayFabEditorPrefsSO
   m_EditorClassIdentifier: 
   DevAccountEmail: artem.gawrilyuk@gmail.com
-  DevAccountToken: 3jyepiz16z3chbsihgyrzjaay3xezdzjuj4qf5jiiotifq657z91bgrhof91czy9yqz3ed8zyoact949ip8zcsd39bordftdq3gfri3m1zpr3zgnr6ww6tsmgqrurtjjb4ambke1k3dqaabh8zsu6k3gchq7sqe58yh3x6d9d149ebzcu1tsnfo3jhhxdu9pxgdrwupi
+  DevAccountToken: eoxgpspw474sgadjszkfeimihd3aytpzr9fkc55hykjgsjbj9othn7s8gj47wbweco1hkx39i93opfd9hsm4uajfiz7nxmo4on89gjsgjza8zbxq8subeun7fbn14fxhxpn1n4mj5pgd9tjyghntk45o9fhgejh5rbk1fy8y5fgzpyuq38z7cacssj6c5dga8nytw3dj
   AadAuthorization: 
-  SelectedStudio: 
+  SelectedStudio: _OVERRIDE_
   SdkPath: Assets/PlayFabSDK
   EdExPath: 
   LocalCloudScriptPath: 

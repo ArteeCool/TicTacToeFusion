@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Fusion;
 using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
+using WebSocketSharp;
 using Application = UnityEngine.Device.Application;
 using Random = UnityEngine.Random;
 using SystemInfo = UnityEngine.Device.SystemInfo;
@@ -46,7 +48,6 @@ public class ProfileController : NetworkBehaviour
     {  
         CheckForExistence();
         _profile = JsonConvert.DeserializeObject<Profile>(ReadFromFile());
-        Debug.Log(_profile.LastTimeWasInGame);
         ProfileViewmodel.Instance.Setup();
         
         if (Application.internetReachability == NetworkReachability.NotReachable)
@@ -84,10 +85,7 @@ public class ProfileController : NetworkBehaviour
             CreateAccount = true
         }, result => {
             _loginComplete = true;
-            Debug.Log("Login successful");
         }, error => {   
-            Debug.Log("An error occurred while logging in");
-            Debug.Log(error.ErrorDetails);
             _loginComplete = true;
             _errorOccurredWhileLogging = true;
             _dataIsSynchronized = true;
@@ -100,7 +98,6 @@ public class ProfileController : NetworkBehaviour
         {
             _profile.LastTimeWasInGame = DateTime.Now;
             SaveData();
-            Debug.Log("Data was loaded from storage");
             return;    
         }
 
@@ -114,7 +111,6 @@ public class ProfileController : NetworkBehaviour
             {
                 if (_profile.LastTimeWasInGame > JsonConvert.DeserializeObject<Profile>(record.Value).LastTimeWasInGame)
                 {
-                    Debug.Log("Data on client was newer");
                     _profile.LastTimeWasInGame = DateTime.Now;
                     SaveData();
                 }
@@ -129,13 +125,10 @@ public class ProfileController : NetworkBehaviour
             {
                 SetUserData();
             }
-            Debug.Log("Data retrieval is successful");
             _dataIsSynchronized = true;
             ProfileViewmodel.Instance.Setup();
         }, error =>
         {
-            Debug.Log("Got error retrieving user data:");
-            Debug.Log(error.GenerateErrorReport());
             _dataIsSynchronized = true;
         });
     }
@@ -148,9 +141,7 @@ public class ProfileController : NetworkBehaviour
         {
             DisplayName = _profile.Name
         }, result => {
-            Debug.Log("The players display name is now: " + result.DisplayName);
         }, error => { 
-            Debug.LogError(error.GenerateErrorReport());
         });
     }
 
@@ -171,10 +162,8 @@ public class ProfileController : NetworkBehaviour
                 { "Profile", JsonConvert.SerializeObject(_profile) },
             },
         }, result => {
-            Debug.Log("Successfully updated user data");
         }, error =>
         {
-            Debug.Log("Got error setting user data");
         });
     }
     
@@ -194,7 +183,6 @@ public class ProfileController : NetworkBehaviour
         {
             _profile.Name = GeneratePlayerNickname();
             WriteToFile(JsonConvert.SerializeObject(_profile));
-            Debug.Log("Profile wasn't found in storage, empty profile was created");
         }
     }
     

@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Fusion;
 using Fusion.Sockets;
 using TMPro;
@@ -47,8 +49,11 @@ public class NetworkController : Fusion.Behaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        if (GameController.Instance._gamestarted) return;
+
         if (_runner.SessionInfo.PlayerCount == 2)
         {
+
             GameController.Instance.StartGame();
         }
     }
@@ -138,34 +143,41 @@ public class NetworkController : Fusion.Behaviour, INetworkRunnerCallbacks
         
     }
 
-    void INetworkRunnerCallbacks.OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
-    {
-        OnConnectFailed(runner, remoteAddress, reason);
-    }
-
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
     {
         
     }
 
-    void INetworkRunnerCallbacks.OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
-    {
-        OnReliableDataReceived(runner, player, key, data);
-    }
-
-    void INetworkRunnerCallbacks.OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
-    {
-        OnReliableDataProgress(runner, player, key, progress);
-    }
-
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
     {
-        throw new NotImplementedException();
+        key.GetInts(out var a, out var b, out var c, out var d);
+        StartCoroutine(Fill(a, b, c, data));
+
+    }
+
+    public IEnumerator Fill(int a, int b, int c, ArraySegment<byte> data)
+    {
+        while (GameProfilesViewmodel.Instance == null)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        
+        if (a == 0)
+        {
+            GameProfilesViewmodel.Instance.Setup(Encoding.UTF8.GetString(data),-1,-1);
+        }
+        else if (a == 1)
+        {
+            GameProfilesViewmodel.Instance.Setup(null,Convert.ToInt32(Encoding.UTF8.GetString(data)),-1);
+        }        
+        else if (a == 2)
+        {
+            GameProfilesViewmodel.Instance.Setup(null,-1,Convert.ToInt32(Encoding.UTF8.GetString(data)));
+        }
     }
 
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
     {
-        throw new NotImplementedException();
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -186,8 +198,7 @@ public class NetworkController : Fusion.Behaviour, INetworkRunnerCallbacks
     {
         Disconnect();
     }
-
-    // ReSharper disable once Unity.IncorrectMethodSignature
+    
     public void OnConnectedToServer(NetworkRunner runner)
     {
     }

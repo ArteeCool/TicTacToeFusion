@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
+using Fusion.Sockets;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,13 +22,13 @@ public class GameController : NetworkBehaviour
     
     [SerializeField] private List<String> _buttonsMarks; 
     
-    [SerializeField] private NetworkController _networkController;
-    
     [SerializeField] private GameObject _restartButton;
     
     private Boolean _state;
     
     public Boolean _playerTurn;
+    
+    public Boolean _gamestarted;
 
     private void Start()
     {
@@ -40,17 +42,49 @@ public class GameController : NetworkBehaviour
 
     public void StartGame()
     {
+        _gamestarted = true;
         _playerTurn = false;
         OnButtonClicked();
-
-        /*foreach (var player in NetworkController.Instance._runner.ActivePlayers)
-        { 
-        }*/
+        
+        GetInfo();
+        
     }
 
     public void Disconnect()
     {
         NetworkController.Instance.Disconnect();
+    }
+
+    public void GetInfo()
+    {
+        List<byte> Name = new List<byte>();
+        Name.AddRange(Encoding.UTF8.GetBytes(ProfileController.Instance._profile.Name));
+        
+        
+        List<byte> WinsCount = new List<byte>();
+        WinsCount.AddRange(Encoding.UTF8.GetBytes(ProfileController.Instance._profile.WinCount.ToString()));
+        
+        List<byte> AvatarId = new List<byte>();
+        AvatarId.AddRange(Encoding.UTF8.GetBytes(ProfileController.Instance._profile.AvatarId.ToString()));
+        
+        
+        if (NetworkController.Instance._runner.IsServer)
+        {
+            foreach (var playerRef in NetworkController.Instance._runner.ActivePlayers)
+            {
+                if (playerRef.PlayerId == NetworkController.Instance._runner.LocalPlayer.PlayerId) continue;
+                
+                NetworkController.Instance._runner.SendReliableDataToPlayer(playerRef, ReliableKey.FromInts(0), Name.ToArray()); 
+                NetworkController.Instance._runner.SendReliableDataToPlayer(playerRef, ReliableKey.FromInts(1), WinsCount.ToArray());
+                NetworkController.Instance._runner.SendReliableDataToPlayer(playerRef, ReliableKey.FromInts(2), AvatarId.ToArray());
+            }
+        }
+        else
+        {
+            NetworkController.Instance._runner.SendReliableDataToServer(ReliableKey.FromInts(0), Name.ToArray());
+            NetworkController.Instance._runner.SendReliableDataToServer(ReliableKey.FromInts(1), WinsCount.ToArray());
+            NetworkController.Instance._runner.SendReliableDataToServer(ReliableKey.FromInts(2), AvatarId.ToArray());
+        }
     }
     
     public void OnButtonClicked()
@@ -72,6 +106,8 @@ public class GameController : NetworkBehaviour
                 ProfileController.Instance._profile.WinCount++;
                 ProfileController.Instance.SaveData();
             }
+            GetInfo();
+            GameProfilesViewmodel.Instance.UpdateProfile();
             if (_playerTurn)
             {
                 _circleWins++;
